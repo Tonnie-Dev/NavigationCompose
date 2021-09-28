@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.rally.ui.components.RallyTabRow
 import com.example.compose.rally.ui.theme.RallyTheme
@@ -66,19 +67,24 @@ fun RallyApp() {
             }
 
         ) { innerPadding ->
-            
+
             NavHost(
                 navController = navController,
                 startDestination = RallyScreen.Overview.name,
                 modifier = Modifier.padding(innerPadding)
-            ){}
-           /* Box(Modifier.padding(innerPadding)) {
-                currentScreen.content(
-                    onScreenChange = { screen ->
-                        currentScreen = RallyScreen.valueOf(screen)
-                    }
-                )
-            }*/
+            ) {
+
+                //use composable() to name your routes, args & deep links
+                composable(route = RallyScreen.Overview.name){}
+//
+            }
+            /* Box(Modifier.padding(innerPadding)) {
+                 currentScreen.content(
+                     onScreenChange = { screen ->
+                         currentScreen = RallyScreen.valueOf(screen)
+                     }
+                 )
+             }*/
         }
     }
 }
