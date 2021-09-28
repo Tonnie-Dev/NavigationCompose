@@ -76,6 +76,8 @@ fun RallyApp() {
 
                 //use composable() to name your routes, args & deep links
                 composable(route = RallyScreen.Overview.name){}
+                composable(route = RallyScreen.Accounts.name){}
+                composable(route = RallyScreen.Bills.name){}
 //
             }
             /* Box(Modifier.padding(innerPadding)) {
