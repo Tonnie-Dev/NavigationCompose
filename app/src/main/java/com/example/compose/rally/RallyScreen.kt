@@ -16,6 +16,8 @@
 
 package com.example.compose.rally
 
+import androidx.compose.foundation.Image
+import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.MoneyOff
@@ -33,6 +35,7 @@ import com.example.compose.rally.ui.overview.OverviewBody
 enum class RallyScreen(
     val icon: ImageVector,
     val body: @Composable ((String) -> Unit) -> Unit
+
 ) {
     Overview(
         icon = Icons.Filled.PieChart,
@@ -50,6 +53,8 @@ enum class RallyScreen(
     @Composable
     fun content(onScreenChange: (String) -> Unit) {
         body(onScreenChange)
+        
+
     }
 
     companion object {
