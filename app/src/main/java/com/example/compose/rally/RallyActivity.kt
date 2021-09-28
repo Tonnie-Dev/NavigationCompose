@@ -29,6 +29,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.example.compose.rally.ui.components.RallyTabRow
 import com.example.compose.rally.ui.theme.RallyTheme
 
@@ -48,10 +50,12 @@ class RallyActivity : ComponentActivity() {
 @Composable
 fun RallyApp() {
     RallyTheme {
-        val allScreens = RallyScreen.values().toList()
 
+        val navController = rememberNavController()
+        val allScreens = RallyScreen.values().toList()
         //remember savable ensure component survive config changes
         var currentScreen by rememberSaveable { mutableStateOf(RallyScreen.Overview) }
+
         Scaffold(
             topBar = {
                 RallyTabRow(
@@ -60,19 +64,36 @@ fun RallyApp() {
                     currentScreen = currentScreen
                 )
             }
+
         ) { innerPadding ->
-            Box(Modifier.padding(innerPadding)) {
+            
+            NavHost(
+                navController = navController,
+                startDestination = RallyScreen.Overview.name,
+                modifier = Modifier.padding(innerPadding)
+            ){}
+           /* Box(Modifier.padding(innerPadding)) {
                 currentScreen.content(
                     onScreenChange = { screen ->
                         currentScreen = RallyScreen.valueOf(screen)
                     }
                 )
-            }
+            }*/
         }
     }
 }
-/*
 
 @Preview(name = "Rally App")
 @Composable
-fun PreviewRallyApp() = RallyApp()*/
+fun PreviewRallyApp() = RallyApp()
+
+
+@Composable
+fun TestScaff() {
+
+
+    Scaffold(topBar = {}) {
+
+
+    }
+}
