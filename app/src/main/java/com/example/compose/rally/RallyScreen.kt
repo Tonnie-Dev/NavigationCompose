@@ -36,33 +36,26 @@ enum class RallyScreen(
     val icon: ImageVector
 
 ) {
-    Overview(
-        icon = Icons.Filled.PieChart,
-        body = { OverviewBody() }
-    ),
-    Accounts(
-        icon = Icons.Filled.AttachMoney,
-        body = { AccountsBody(UserData.accounts) }
-    ),
-    Bills(
-        icon = Icons.Filled.MoneyOff,
-        body = { BillsBody(UserData.bills) }
-    );
 
-    @Composable
+    //screens
+    Overview(icon = Icons.Filled.PieChart),
+    Accounts(icon = Icons.Filled.AttachMoney),
+    Bills(icon = Icons.Filled.MoneyOff);
+
+   /* @Composable
     fun content(onScreenChange: (String) -> Unit) {
         body(onScreenChange)
         
 
-    }
+    }*/
 
     companion object {
         fun fromRoute(route: String?): RallyScreen =
             when (route?.substringBefore("/")) {
-                Accounts.name -> Accounts
+                RallyScreen.Accounts.name -> RallyScreen.Accounts
                 Bills.name -> Bills
-                Overview.name -> Overview
-                null -> Overview
+                RallyScreen.Overview.name -> RallyScreen.Overview
+                null -> RallyScreen.Overview
                 else -> throw IllegalArgumentException("Route $route is not recognized.")
             }
     }
