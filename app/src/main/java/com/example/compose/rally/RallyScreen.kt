@@ -33,8 +33,7 @@ import com.example.compose.rally.ui.overview.OverviewBody
  * Screen metadata for Rally.
  */
 enum class RallyScreen(
-    val icon: ImageVector,
-    val body: @Composable ((String) -> Unit) -> Unit
+    val icon: ImageVector
 
 ) {
     Overview(
