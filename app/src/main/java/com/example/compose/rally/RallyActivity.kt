@@ -31,9 +31,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.compose.rally.data.UserData
+import com.example.compose.rally.ui.accounts.AccountsBody
+import com.example.compose.rally.ui.bills.BillsBody
 import com.example.compose.rally.ui.components.RallyTabRow
+import com.example.compose.rally.ui.overview.OverviewBody
 import com.example.compose.rally.ui.theme.RallyTheme
+import com.example.compose.rally.RallyScreen.Overview
+import com.example.compose.rally.RallyScreen.Accounts
+import com.example.compose.rally.RallyScreen.Bills
+
 
 /**
  * This Activity recreates part of the Rally Material Study from
@@ -54,14 +63,20 @@ fun RallyApp() {
 
         val navController = rememberNavController()
         val allScreens = RallyScreen.values().toList()
+
+        val backStackEntry = navController.currentBackStackEntryAsState()
+
+        val currentScreen = RallyScreen.fromRoute(backStackEntry.value?.destination?.route)
+
         //remember savable ensure component survive config changes
-        var currentScreen by rememberSaveable { mutableStateOf(RallyScreen.Overview) }
+       // var currentScreen by rememberSaveable { mutableStateOf(RallyScreen.Overview) }
 
         Scaffold(
             topBar = {
                 RallyTabRow(
                     allScreens = allScreens,
-                    onTabSelected = { screen -> currentScreen = screen },
+                    //navigating to the selected tab
+                    onTabSelected = { screen -> navController.navigate(screen.name) },
                     currentScreen = currentScreen
                 )
             }
@@ -75,9 +90,18 @@ fun RallyApp() {
             ) {
 
                 //use composable() to name your routes, args & deep links
-                composable(route = RallyScreen.Overview.name){}
-                composable(route = RallyScreen.Accounts.name){}
-                composable(route = RallyScreen.Bills.name){}
+                composable(Overview.name){
+                    OverviewBody()
+
+                }
+                composable(route = Accounts.name){
+
+                    AccountsBody(accounts = UserData.accounts)
+                }
+                composable(route = Bills.name){
+                    BillsBody(bills = UserData.bills)
+
+                }
 //
             }
             /* Box(Modifier.padding(innerPadding)) {
