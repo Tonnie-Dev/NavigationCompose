@@ -68,8 +68,7 @@ fun RallyApp() {
 
         val currentScreen = RallyScreen.fromRoute(backStackEntry.value?.destination?.route)
 
-        //remember savable ensure component survive config changes
-       // var currentScreen by rememberSaveable { mutableStateOf(RallyScreen.Overview) }
+
 
         Scaffold(
             topBar = {
@@ -85,22 +84,23 @@ fun RallyApp() {
 
             NavHost(
                 navController = navController,
-                startDestination = RallyScreen.Overview.name,
+                startDestination = Overview.name,
                 modifier = Modifier.padding(innerPadding)
             ) {
 
                 //use composable() to name your routes, args & deep links
-                composable(Overview.name){
-                    OverviewBody()
+                composable(route =Overview.name){
 
+                    OverviewBody(onClickSeeAllAccounts = { navController.navigate(Accounts.name) },
+                        onClickSeeAllBills = { navController.navigate(Bills.name) })
                 }
                 composable(route = Accounts.name){
 
                     AccountsBody(accounts = UserData.accounts)
                 }
                 composable(route = Bills.name){
-                    BillsBody(bills = UserData.bills)
 
+                    BillsBody(bills = UserData.bills)
                 }
 //
             }
