@@ -52,10 +52,10 @@ enum class RallyScreen(
     companion object {
         fun fromRoute(route: String?): RallyScreen =
             when (route?.substringBefore("/")) {
-                RallyScreen.Accounts.name -> RallyScreen.Accounts
+                Accounts.name -> Accounts
                 Bills.name -> Bills
-                RallyScreen.Overview.name -> RallyScreen.Overview
-                null -> RallyScreen.Overview
+                Overview.name -> Overview
+                null -> Overview
                 else -> throw IllegalArgumentException("Route $route is not recognized.")
             }
     }

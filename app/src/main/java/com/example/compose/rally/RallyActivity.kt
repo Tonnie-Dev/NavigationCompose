@@ -29,10 +29,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
 import com.example.compose.rally.data.UserData
 import com.example.compose.rally.ui.accounts.AccountsBody
 import com.example.compose.rally.ui.bills.BillsBody
@@ -89,28 +87,31 @@ fun RallyApp() {
             ) {
 
                 //use composable() to name your routes, args & deep links
-                composable(route =Overview.name){
+                composable(route = Overview.name) {
 
-                    OverviewBody(onClickSeeAllAccounts = { navController.navigate(Accounts.name) },
+                    OverviewBody(
+                        onClickSeeAllAccounts = { navController.navigate(Accounts.name) },
                         onClickSeeAllBills = { navController.navigate(Bills.name) })
                 }
-                composable(route = Accounts.name){
+                composable(route = Accounts.name) {
 
                     AccountsBody(accounts = UserData.accounts)
                 }
-                composable(route = Bills.name){
+                composable(route = Bills.name) {
 
                     BillsBody(bills = UserData.bills)
                 }
-//
+
+//add a new composable [read a new destination]
+
+                val accountsName = Accounts.name
+                composable(route = "$accountsName/{name}", arguments = listOf(navArgument(
+                    name = "name",
+                    builder ={type = NavType.StringType}
+                ))){}
+
             }
-            /* Box(Modifier.padding(innerPadding)) {
-                 currentScreen.content(
-                     onScreenChange = { screen ->
-                         currentScreen = RallyScreen.valueOf(screen)
-                     }
-                 )
-             }*/
+
         }
     }
 }
