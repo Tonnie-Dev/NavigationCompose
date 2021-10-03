@@ -89,7 +89,6 @@ fun RallyApp() {
             ) {
 
 
-
                 //use composable() to name your routes, args & deep links
                 composable(route = Overview.name) {
 
@@ -124,16 +123,15 @@ fun RallyApp() {
 
                 composable(route = "$accountsName/{name}",
 
-
                     arguments = listOf(navArgument(
                         name = "name",
                         builder = { type = NavType.StringType }
-                    ))) {
+                    )))
 
+                { backStackEntry ->
 
-                        entry ->
+                    val accountName = backStackEntry.arguments?.getString("name")
 
-                    val accountName = entry.arguments?.getString("name")
                     val account = UserData.getAccount(accountName = accountName)
                     SingleAccountBody(account = account)
                 }
