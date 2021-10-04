@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
+import androidx.navigation.navDeepLink
 import com.example.compose.rally.data.UserData
 import com.example.compose.rally.ui.accounts.AccountsBody
 import com.example.compose.rally.ui.bills.BillsBody
@@ -82,63 +84,76 @@ fun RallyApp() {
 
         ) { innerPadding ->
 
-            NavHost(
-                navController = navController,
-                startDestination = Overview.name,
-                modifier = Modifier.padding(innerPadding)
-            ) {
-
-
-                //use composable() to name your routes, args & deep links
-                composable(route = Overview.name) {
-
-                    OverviewBody(
-                        onClickSeeAllAccounts = { navController.navigate(Accounts.name) },
-                        onClickSeeAllBills = { navController.navigate(Bills.name) },
-                        onAccountClick = { name ->
-                            navigateToSingleAccount(
-                                navController = navController,
-                                accountName = name
-                            )
-                        })
-                }
-                composable(route = Accounts.name) {
-
-                    AccountsBody(accounts = UserData.accounts) { name ->
-                        navigateToSingleAccount(
-                            navController = navController,
-                            accountName = name
-                        )
-                    }
-                }
-                composable(route = Bills.name) {
-
-                    BillsBody(bills = UserData.bills)
-                }
-
-                //add a new composable [read a new destination]
-
-                val accountsName = Accounts.name
-
-
-                composable(route = "$accountsName/{name}",
-
-                    arguments = listOf(navArgument(
-                        name = "name",
-                        builder = { type = NavType.StringType }
-                    )))
-
-                { backStackEntry ->
-
-                    val accountName = backStackEntry.arguments?.getString("name")
-
-                    val account = UserData.getAccount(accountName = accountName)
-                    SingleAccountBody(account = account)
-                }
-
-            }
+            RallyNavHost(navController, innerPadding)
 
         }
+    }
+}
+
+@Composable
+fun RallyNavHost(
+    navController: NavHostController,
+    innerPadding: PaddingValues
+) {
+    NavHost(
+        navController = navController,
+        startDestination = Overview.name,
+        modifier = Modifier.padding(innerPadding)
+    ) {
+
+
+        //use composable() to name your routes, args & deep links
+        composable(route = Overview.name) {
+
+            OverviewBody(
+                onClickSeeAllAccounts = { navController.navigate(Accounts.name) },
+                onClickSeeAllBills = { navController.navigate(Bills.name) },
+                onAccountClick = { name ->
+                    navigateToSingleAccount(
+                        navController = navController,
+                        accountName = name
+                    )
+                })
+        }
+        composable(route = Accounts.name) {
+
+            AccountsBody(accounts = UserData.accounts) { name ->
+                navigateToSingleAccount(
+                    navController = navController,
+                    accountName = name
+                )
+            }
+        }
+        composable(route = Bills.name) {
+
+            BillsBody(bills = UserData.bills)
+        }
+
+        //add a new composable [read a new destination]
+
+        val accountsName = Accounts.name
+
+
+        composable(route = "$accountsName/{name}",
+
+            arguments = listOf(navArgument(
+                name = "name",
+                builder = { type = NavType.StringType }
+            )),
+
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "rally://$accountsName/{name}"
+            })
+        )
+
+        { backStackEntry ->
+
+            val accountName = backStackEntry.arguments?.getString("name")
+
+            val account = UserData.getAccount(accountName = accountName)
+            SingleAccountBody(account = account)
+        }
+
     }
 }
 
